@@ -21,6 +21,7 @@ rcms.HITGROUP_HEAD = HITGROUP_HEAD;
 Clockwork.kernel:IncludePrefixed("sv_hooks.lua");
 Clockwork.kernel:IncludePrefixed("sh_hooks.lua");
 Clockwork.kernel:IncludePrefixed("sh_player.lua");
+Clockwork.kernel:IncludePrefixed("language/sh_english.lua");
 
 rcms.BleedRate = 3;
 rcms.BleedAmount = 1;
@@ -28,4 +29,18 @@ rcms.BleedAmount = 1;
 function rcms:Normalize(value, min, max)
     local normalized = (value - min) / (max - min)
     return normalized;
+end;
+
+function rcms:LText(woundType)
+	if (woundType) then
+		if (woundType == "WOUND_LEGL_SPRAIN") then
+			return {"StatusLegSprained", "left"};
+		elseif (woundType == "WOUND_LEGR_SPRAIN") then
+			return {"StatusLegSprained", "right"};
+		elseif (woundType == "WOUND_LEGL_BREAK") then
+			return {"StatusLegBroken", "left"};
+		elseif (woundType == "WOUND_LEGR_BREAK") then
+			return {"StatusLegBroken", "right"};
+		end;
+	end;
 end;

@@ -37,10 +37,12 @@ end;
 
 function rcms:RemoveWound(player, woundType)
     local wounds = rcms:GetWoundTable(player)
-    if (wounds != nil) then
-        table.RemoveByValue(wounds, woundType);
-        player:SetCharacterData("Wounds", wounds);
-    end;
+    print("Wounds:")
+    PrintTable(wounds)
+    table.RemoveByValue(wounds, woundType);
+    print("Wounds after removal: ")
+    PrintTable(wounds)
+    player:SetCharacterData("Wounds", wounds);
 end;
 
 function rcms:RemoveAllWounds(player)
