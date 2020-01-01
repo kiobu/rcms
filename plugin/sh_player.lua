@@ -1,3 +1,11 @@
+local HITGROUP_RIGHTARM = HITGROUP_RIGHTARM;
+local HITGROUP_RIGHTLEG = HITGROUP_RIGHTLEG;
+local HITGROUP_LEFTARM = HITGROUP_LEFTARM;
+local HITGROUP_LEFTLEG = HITGROUP_LEFTLEG;
+local HITGROUP_STOMACH = HITGROUP_STOMACH;
+local HITGROUP_CHEST = HITGROUP_CHEST;
+local HITGROUP_HEAD = HITGROUP_HEAD;
+
 function rcms:GetWoundTable(player)
 	local wounds = player:GetCharacterData("Wounds");
 	if (wounds and istable(wounds)) then
@@ -25,6 +33,16 @@ function rcms:ApplyWound(player, woundType)
     local wounds = rcms:GetWoundTable(player)
     table.insert(wounds, woundType)
     player:SetCharacterData("Wounds", wounds);
+
+    if (woundType == "WOUND_LEGL_SPRAIN") then
+        Clockwork.limb:TakeDamage(player, HITGROUP_LEFTLEG, 50)
+    elseif (woundType == "WOUND_LEGR_SPRAIN") then
+        Clockwork.limb:TakeDamage(player, HITGROUP_RIGHTLEG, 50)
+    elseif (woundType == "WOUND_LEGL_BREAK") then
+        Clockwork.limb:TakeDamage(player, HITGROUP_LEFTLEG, 100)
+    elseif (woundType == "WOUND_LEGR_BREAK") then
+        Clockwork.limb:TakeDamage(player, HITGROUP_LEFTLEG, 100)
+    end;
 end;
 
 function rcms:RemoveWound(player, woundType)

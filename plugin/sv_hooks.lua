@@ -13,34 +13,62 @@ function rcms:GetFallDamage(player, vel)
 
         if ((normal >= 0.33) and (normal < 0.45)) then
             if (rand <= 20) then
-                if (rcms:HasWound(player, "WOUND_SPRAIN")) then
-                    Clockwork.player:Notify(player, "Your sprain has developed into a break. Your movement speed has severely decreased.")
-                    rcms:ApplyWound(player, "WOUND_BROKEN_LEG")
-                    rcms:RemoveWound(player, "WOUND_SPRAIN")
+                if (rcms:HasWound(player, "WOUND_LEGL_SPRAIN")) then
+                    Clockwork.player:Notify(player, "Your left ankle sprain has developed into a break. Your movement speed has severely decreased.")
+                    rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
+                    rcms:RemoveWound(player, "WOUND_LEGL_SPRAIN")
+                elseif (rcms:HasWound(player, "WOUND_LEGR_SPRAIN")) then
+                    Clockwork.player:Notify(player, "Your right ankle sprain has developed into a break. Your movement speed has severely decreased.")
+                    rcms:ApplyWound(player, "WOUND_LEGR_BREAK")
+                    rcms:RemoveWound(player, "WOUND_LEGR_SPRAIN")  
                 else
-                    Clockwork.player:Notify(player, "You have sprained your ankle. Your movement speed has decreased.")
-                    rcms:ApplyWound(player, "WOUND_SPRAIN")
+                    if (rand <= 10) then
+                        Clockwork.player:Notify(player, "You have sprained your left ankle. Your movement speed has decreased.")
+                        rcms:ApplyWound(player, "WOUND_LEGL_SPRAIN")
+                    else
+                        Clockwork.player:Notify(player, "You have sprained your right ankle. Your movement speed has decreased.")
+                        rcms:ApplyWound(player, "WOUND_LEGR_SPRAIN")    
+                    end;
                 end;
             end;
         elseif ((normal >= 0.45) and (normal < 0.55)) then
             if (rand <= 40) then
-                if (rcms:HasWound(player, "WOUND_SPRAIN")) then
-                    Clockwork.player:Notify(player, "Your sprain has developed into a break. Your movement speed has severely decreased.")
-                    rcms:ApplyWound(player, "WOUND_BROKEN_LEG")
-                    rcms:RemoveWound(player, "WOUND_SPRAIN")
+                if (rcms:HasWound(player, "WOUND_LEGL_SPRAIN")) then
+                    Clockwork.player:Notify(player, "Your left ankle sprain has developed into a break. Your movement speed has severely decreased.")
+                    rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
+                    rcms:RemoveWound(player, "WOUND_LEGL_SPRAIN")
+                elseif (rcms:HasWound(player, "WOUND_LEGR_SPRAIN")) then
+                    Clockwork.player:Notify(player, "Your right ankle sprain has developed into a break. Your movement speed has severely decreased.")
+                    rcms:ApplyWound(player, "WOUND_LEGR_BREAK")
+                    rcms:RemoveWound(player, "WOUND_LEGR_SPRAIN")  
                 else
-                    Clockwork.player:Notify(player, "You have sprained your ankle. Your movement speed has decreased.")
-                    rcms:ApplyWound(player, "WOUND_SPRAIN")
+                    if (rand <= 20) then
+                        Clockwork.player:Notify(player, "You have sprained your left ankle. Your movement speed has decreased.")
+                        rcms:ApplyWound(player, "WOUND_LEGL_SPRAIN")
+                    else
+                        Clockwork.player:Notify(player, "You have sprained your right ankle. Your movement speed has decreased.")
+                        rcms:ApplyWound(player, "WOUND_LEGR_SPRAIN")   
+                    end; 
                 end;
             end;
         elseif (normal >= 0.55) then
             if (rand <= 50) then
-                if (rcms:HasWound(player, "WOUND_SPRAIN")) then
-                    rcms:RemoveWound(player, "WOUND_SPRAIN")
-                    rcms:ApplyWound(player, "WOUND_BROKEN_LEG")
+                if (rcms:HasWound(player, "WOUND_LEGL_SPRAIN")) then
+                    Clockwork.player:Notify(player, "Your left ankle sprain has developed into a break. Your movement speed has severely decreased.")
+                    rcms:RemoveWound(player, "WOUND_LEGL_SPRAIN")
+                    rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
+                elseif (rcms:HasWound(player, "WOUND_LEGR_SPRAIN")) then
+                    Clockwork.player:Notify(player, "Your right ankle sprain has developed into a break. Your movement speed has severely decreased.")
+                    rcms:RemoveWound(player, "WOUND_LEGR_SPRAIN")
+                    rcms:ApplyWound(player, "WOUND_LEGR_BREAK")
                 else
-                    Clockwork.player:Notify(player, "You have broken your leg. Your movement speed has severely decreased.")
-                    rcms:ApplyWound(player, "WOUND_BROKEN_LEG")
+                    if (rand <= 25) then
+                        Clockwork.player:Notify(player, "You have broken your left leg. Your movement speed has severely decreased.")
+                        rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
+                    else
+                        Clockwork.player:Notify(player, "You have broken your right leg. Your movement speed has severely decreased.")
+                        rcms:ApplyWound(player, "WOUND_LEGR_BREAK") 
+                    end;
                 end;
             end;
         end;
