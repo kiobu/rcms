@@ -11,7 +11,7 @@ local Clockwork = Clockwork;
 local COMMAND = Clockwork.command:New("HealthStatus");
 
 COMMAND.tip = "Check your health status.";
-COMMAND.access = "o";
+COMMAND.access = CMD_DEFAULT;
 COMMAND.alias = {"stat", "hs"};
 
 -- Called when the command has been run.
