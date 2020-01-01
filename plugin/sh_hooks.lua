@@ -9,5 +9,13 @@ function rcms:PlayerThink(player, curTime, infoTable)
             infoTable.walkspeed = 50;
             infoTable.runSpeed = 25;
         end;
+        if (v == "WOUND_LEGL_BLACKED") or (v == "WOUND_LEGR_BLACKED") then
+            infoTable.walkspeed = 0;
+            infoTable.runSpeed = 0;
+        end;
+    end;
+
+    if (!Clockwork.limb:IsAnyDamaged(player)) then
+        player:SetHealth(player:GetMaxHealth());
     end;
 end;

@@ -37,14 +37,78 @@ end;
 
 function rcms:RemoveWound(player, woundType)
     local wounds = rcms:GetWoundTable(player)
-    print("Wounds:")
-    PrintTable(wounds)
     table.RemoveByValue(wounds, woundType);
-    print("Wounds after removal: ")
-    PrintTable(wounds)
     player:SetCharacterData("Wounds", wounds);
 end;
 
 function rcms:RemoveAllWounds(player)
     player:SetCharacterData("Wounds", {});
+end;
+
+function rcms:CalculateFallWounds(player)
+    local wounds = rcms:GetWoundTable(player)
+
+    local LEFTLEG = Clockwork.limb:GetHealth(player, rcms.HITGROUP_LEFTLEG, false)
+    local RIGHTLEG = Clockwork.limb:GetHealth(player, rcms.HITGROUP_RIGHTLEG, false)
+
+    print("DamageL: "..LEFTLEG)
+    print("DamageR: "..RIGHTLEG)
+    PrintTable(player:GetCharacterData("LimbData"));
+
+    if (LEFTLEG <= 70 and LEFTLEG >= 50) then
+        if (rcms:HasWound(player, "WOUND_LEGL_SPRAIN")) then
+            Clockwork.player:Notify(player, {"ActionLegSprainToBreak", "left"})
+            rcms:RemoveWound(player, "WOUND_LEGL_SPRAIN")
+            rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
+        elseif (rcms:HasWound(player, "WOUND_LEGL_BREAK")) then
+            Clockwork.player:Notify(player, {"ActionLegBlacked", "left"})
+            rcms:RemoveWound(player, "WOUND_LEGL_BREAK")
+            rcms:ApplyWound(player, "WOUND_LEGL_BLACK")
+        else
+            Clockwork.player:Notify(player, {"ActionLegSprained", "left"})
+            rcms:ApplyWound(player, "WOUND_LEGL_SPRAIN")
+        end;
+    end;
+    if (RIGHTLEG <= 70 and RIGHTLEG >= 50) then
+        if (rcms:HasWound(player, "WOUND_LEGR_SPRAIN")) then
+            Clockwork.player:Notify(player, {"ActionLegSprainToBreak", "right"})
+            rcms:RemoveWound(player, "WOUND_LEGR_SPRAIN")
+            rcms:ApplyWound(player, "WOUND_LEGR_BREAK")
+        elseif (rcms:HasWound(player, "WOUND_LEGR_BREAK")) then
+            Clockwork.player:Notify(player, {"ActionLegBlacked", "right"})
+            rcms:RemoveWound(player, "WOUND_LEGR_BREAK")
+            rcms:ApplyWound(player, "WOUND_LEGR_BLACK")
+        else
+            Clockwork.player:Notify(player, {"ActionLegSprained", "right"})
+            rcms:ApplyWound(player, "WOUND_LEGR_SPRAIN")
+        end;
+    end;
+    if (LEFTLEG < 50) then
+        if (rcms:HasWound(player, "WOUND_LEGL_SPRAIN")) then
+            Clockwork.player:Notify(player, {"ActionLegSprainToBreak", "left"})
+            rcms:RemoveWound(player, "WOUND_LEGL_SPRAIN")
+            rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
+        elseif (rcms:HasWound(player, "WOUND_LEGL_BREAK")) then
+            Clockwork.player:Notify(player, {"ActionLegBlacked", "left"})
+            rcms:RemoveWound(player, "WOUND_LEGL_BREAK")
+            rcms:ApplyWound(player, "WOUND_LEGL_BLACK")
+        else 
+            Clockwork.player:Notify(player, {"ActionLegBroken", "left"})
+            rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
+        end;
+    end;
+    if (RIGHTLEG < 50) then
+        if (rcms:HasWound(player, "WOUND_LEGR_SPRAIN")) then
+            Clockwork.player:Notify(player, {"ActionLegSprainToBreak", "right"})
+            rcms:RemoveWound(player, "WOUND_LEGR_SPRAIN")
+            rcms:ApplyWound(player, "WOUND_LEGR_BREAK")
+        elseif (rcms:HasWound(player, "WOUND_LEGR_BREAK")) then
+            Clockwork.player:Notify(player, {"ActionLegBlacked", "right"})
+            rcms:RemoveWound(player, "WOUND_LEGR_BREAK")
+            rcms:ApplyWound(player, "WOUND_LEGR_BLACK")
+        else 
+            Clockwork.player:Notify(player, {"ActionLegBroken", "right"})
+            rcms:ApplyWound(player, "WOUND_LEGR_BREAK")
+        end;
+    end;
 end;
