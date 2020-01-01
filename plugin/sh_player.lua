@@ -33,22 +33,16 @@ function rcms:ApplyWound(player, woundType)
     local wounds = rcms:GetWoundTable(player)
     table.insert(wounds, woundType)
     player:SetCharacterData("Wounds", wounds);
-
-    if (woundType == "WOUND_LEGL_SPRAIN") then
-        Clockwork.limb:TakeDamage(player, HITGROUP_LEFTLEG, 50)
-    elseif (woundType == "WOUND_LEGR_SPRAIN") then
-        Clockwork.limb:TakeDamage(player, HITGROUP_RIGHTLEG, 50)
-    elseif (woundType == "WOUND_LEGL_BREAK") then
-        Clockwork.limb:TakeDamage(player, HITGROUP_LEFTLEG, 100)
-    elseif (woundType == "WOUND_LEGR_BREAK") then
-        Clockwork.limb:TakeDamage(player, HITGROUP_LEFTLEG, 100)
-    end;
 end;
 
 function rcms:RemoveWound(player, woundType)
     local wounds = rcms:GetWoundTable(player)
-    if (table != nil) then
+    if (wounds != nil) then
         table.RemoveByValue(wounds, woundType);
         player:SetCharacterData("Wounds", wounds);
     end;
+end;
+
+function rcms:RemoveAllWounds(player)
+    player:SetCharacterData("Wounds", {});
 end;
