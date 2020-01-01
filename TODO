@@ -1,7 +1,7 @@
-☐ Modify GetFallDamage in sv_hooks to do something when a player takes fall damage when they already have a broken leg.
+✔ Modify GetFallDamage in sv_hooks to do something when a player takes fall damage when they already have a broken leg. @done(19-12-31 23:07)
 ☐ Refactor the limbs system
 ☐ Proper icons to show in chat.
 ✘ Change string matches to unique IDs @cancelled(19-12-31 19:03)  
     - Not worth the hassle.
 ☐ Possibly alter F1 menu with wounds.
-☐ Rather than calculate fall damage injuries through velocity, use the Clockwork.limb library to see if their limb health is below a certain level to apply injuries.
+✔ Rather than calculate fall damage injuries through velocity, use the Clockwork.limb library to see if their limb health is below a certain level to apply injuries. @done(19-12-31 23:07)
