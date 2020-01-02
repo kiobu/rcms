@@ -11,5 +11,5 @@ Known issues:
     ✔ When using the HealthStatus command, an error will occur if the player has an invalid wound in their character data. @done(20-01-01 01:43)
         Occurs because LText() uses localization to print their wound, so if the wound is invalid, LText() will fail. Fixed by resetting player's wounds with /HealthReset <playerName>.
     ☐ Look into why CW still thinks the limbs are damaged when F1 shows them as all 100%
-    ☐ Using the splint items on another player doesn't seem to work.
+    ☐ None of the items work when using them on other players from self.
         No messages in the chat when it's done.

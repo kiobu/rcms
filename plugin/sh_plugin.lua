@@ -41,6 +41,8 @@ function rcms:LText(woundType)
 			return {"StatusLegBroken", "left"};
 		elseif (woundType == "WOUND_LEGR_BREAK") then
 			return {"StatusLegBroken", "right"};
+		elseif (woundType == "SE_PAINKILLER") then
+			return {"StatusOnMorphine"}
 		end;
 	end;
 end;
