@@ -5,7 +5,7 @@
 
 local ITEM = Clockwork.item:New();
 
-ITEM.name = "Splint";
+ITEM.name = "SAM Splint";
 ITEM.uniqueID = "rcms_splint";
 ITEM.model = "models/Items/Flare.mdl";
 ITEM.weight = 1;
@@ -13,7 +13,7 @@ ITEM.useText = "Apply to self";
 ITEM.category = "Medical"
 ITEM.business = false;
 ITEM.useSound = "items/medshot4.wav";
-ITEM.description = "A standard-issue splint, used to remedy sprained or broken bones.";
+ITEM.description = "A standard-issue SAM splint, used to remedy sprained or broken bones.";
 ITEM.customFunctions = {"Apply to other"};
 
 -- Called when a player uses the item.
