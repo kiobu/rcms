@@ -2,4 +2,6 @@
 
 A semi-realistic medical system for Clockwork.
 
-## Note: This plugin is not being updated. RCMSv2 will be introduced sometime 2020.
+### Note:
+
+Current development for RCMS is hosted offline and will not be uploaded to this repository until significant releases are made.
