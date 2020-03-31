@@ -6,149 +6,41 @@ local HITGROUP_STOMACH = HITGROUP_STOMACH;
 local HITGROUP_CHEST = HITGROUP_CHEST;
 local HITGROUP_HEAD = HITGROUP_HEAD;
 
-function rcms:GetWoundTable(player)
-	local wounds = player:GetCharacterData("Wounds");
-	if (wounds and istable(wounds)) then
-		return wounds;
-	else
-		return {};
-	end;
+function rcms:ClockworkAddSharedVars(t, playerVars)
+	playerVars:Bool("isOnMorphine", true);
 end;
 
-function rcms:HasWound(player, woundType)
-    local wounds = player:GetCharacterData("Wounds");
-    if (wounds and istable(wounds)) then
-        local hasWound = false;
-        for k, v in pairs(wounds) do
-            if (v == woundType) then
-                hasWound = true;
-                break;
-            end;
-        end;
-        return hasWound;
-	end;
-end;
+function rcms:CalculateFallInjuries(player) -- hitGroup will always return 0 for HITGROUP_GENERIC because CalculateFallInjuries is only called once.
 
-function rcms:ApplyWound(player, woundType)
-    local wounds = rcms:GetWoundTable(player)
-    table.insert(wounds, woundType)
-    player:SetCharacterData("Wounds", wounds);
-end;
+    local LeftLegHealth = Clockwork.limb:GetHealth(player, HITGROUP_LEFTLEG, false)
+    local RightLegHealth = Clockwork.limb:GetHealth(player, HITGROUP_RIGHTLEG, false)
+    local LeftLeg = Clockwork.injury:GetHitgroupName(HITGROUP_LEFTLEG)
+    local RightLeg = Clockwork.injury:GetHitgroupName(HITGROUP_RIGHTLEG)
 
-function rcms:RemoveWound(player, woundType)
-    local wounds = rcms:GetWoundTable(player)
-    table.RemoveByValue(wounds, woundType);
-    player:SetCharacterData("Wounds", wounds);
-end;
-
-function rcms:RemoveAllWounds(player)
-    player:SetCharacterData("Wounds", {});
-end;
-
-function rcms:CalculateFallWounds(player)
-    local wounds = rcms:GetWoundTable(player)
-
-    local LEFTLEG = Clockwork.limb:GetHealth(player, rcms.HITGROUP_LEFTLEG, false)
-    local RIGHTLEG = Clockwork.limb:GetHealth(player, rcms.HITGROUP_RIGHTLEG, false)
-
-    print("DamageL: "..LEFTLEG)
-    print("DamageR: "..RIGHTLEG)
-    PrintTable(player:GetCharacterData("LimbData"));
-
-    if (LEFTLEG <= 70 and LEFTLEG >= 50) then
-        if (rcms:HasWound(player, "WOUND_LEGL_SPRAIN")) then
-            Clockwork.player:Notify(player, {"ActionLegSprainToBreak", "left"})
-            rcms:RemoveWound(player, "WOUND_LEGL_SPRAIN")
-            rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
-        elseif (rcms:HasWound(player, "WOUND_LEGL_BREAK")) then
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "left"})
-            rcms:RemoveWound(player, "WOUND_LEGL_BREAK")
-            rcms:ApplyWound(player, "WOUND_LEGL_BLACKED")
-        elseif (rcms:HasWound(player, "WOUND_LEGL_BLACKED")) then
-            return;
-        else
-            Clockwork.player:Notify(player, {"ActionLegSprained", "left"})
-            rcms:ApplyWound(player, "WOUND_LEGL_SPRAIN")
-        end;
+    print("Calculate fall injuries!")
+    if (LeftLegHealth <= 80 and LeftLegHealth >= 50) then
+        Clockwork.injury:DevelopInjuries(player, 0, LeftLeg, true)
+        print("Player should develop injuries now! LEFTLEG")
     end;
-    if (RIGHTLEG <= 70 and RIGHTLEG >= 50) then
-        if (rcms:HasWound(player, "WOUND_LEGR_SPRAIN")) then
-            Clockwork.player:Notify(player, {"ActionLegSprainToBreak", "right"})
-            rcms:RemoveWound(player, "WOUND_LEGR_SPRAIN")
-            rcms:ApplyWound(player, "WOUND_LEGR_BREAK")
-        elseif (rcms:HasWound(player, "WOUND_LEGR_BREAK")) then
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "right"})
-            rcms:RemoveWound(player, "WOUND_LEGR_BREAK")
-            rcms:ApplyWound(player, "WOUND_LEGR_BLACKED")
-        elseif (rcms:HasWound(player, "WOUND_LEGL_BLACKED")) then
-            return;
-        else
-            Clockwork.player:Notify(player, {"ActionLegSprained", "right"})
-            rcms:ApplyWound(player, "WOUND_LEGR_SPRAIN")
-        end;
+    if (RightLegHealth <= 80 and RightLegHealth >= 50) then
+        Clockwork.injury:DevelopInjuries(player, 0, RightLeg, true)
+        print("Player should develop injuries now! RIGHTLEG")
     end;
-    if (LEFTLEG < 50 and LEFTLEG > 0) then
-        if (rcms:HasWound(player, "WOUND_LEGL_SPRAIN")) then
-            Clockwork.player:Notify(player, {"ActionLegSprainToBreak", "left"})
-            rcms:RemoveWound(player, "WOUND_LEGL_SPRAIN")
-            rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
-        elseif (rcms:HasWound(player, "WOUND_LEGL_BREAK")) then
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "left"})
-            rcms:RemoveWound(player, "WOUND_LEGL_BREAK")
-            rcms:ApplyWound(player, "WOUND_LEGL_BLACKED")
-        elseif (rcms:HasWound(player, "WOUND_LEGL_BLACKED")) then
-            return;
-        else 
-            Clockwork.player:Notify(player, {"ActionLegBroken", "left"})
-            rcms:ApplyWound(player, "WOUND_LEGL_BREAK")
-        end;
+    if (LeftLegHealth < 50 and LeftLegHealth > 0) then
+        Clockwork.injury:DevelopInjuries(player, 1, LeftLeg, true)
+        print("Player should develop injuries now! LEFTLEG")
     end;
-    if (RIGHTLEG < 50 and RIGHTLEG > 0) then
-        if (rcms:HasWound(player, "WOUND_LEGR_SPRAIN")) then
-            Clockwork.player:Notify(player, {"ActionLegSprainToBreak", "right"})
-            rcms:RemoveWound(player, "WOUND_LEGR_SPRAIN")
-            rcms:ApplyWound(player, "WOUND_LEGR_BREAK")
-        elseif (rcms:HasWound(player, "WOUND_LEGR_BREAK")) then
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "right"})
-            rcms:RemoveWound(player, "WOUND_LEGR_BREAK")
-            rcms:ApplyWound(player, "WOUND_LEGR_BLACKED")
-        elseif (rcms:HasWound(player, "WOUND_LEGL_BLACKED")) then
-            return;
-        else 
-            Clockwork.player:Notify(player, {"ActionLegBroken", "right"})
-            rcms:ApplyWound(player, "WOUND_LEGR_BREAK")
-        end;
+    if (RightLegHealth < 50 and RightLegHealth > 0) then
+        Clockwork.injury:DevelopInjuries(player, 1, RightLeg, true)
+        print("Player should develop injuries now! RIGHTLEG")
     end;
-    if (RIGHTLEG == 0) then
-        if (rcms:HasWound(player, "WOUND_LEGR_SPRAIN")) then
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "right"})
-            rcms:RemoveWound(player, "WOUND_LEGR_SPRAIN")
-            rcms:ApplyWound(player, "WOUND_LEGR_BLACKED")
-        elseif (rcms:HasWound(player, "WOUND_LEGR_BREAK")) then
-            rcms:RemoveWound(player, "WOUND_LEGR_BREAK")
-            rcms:ApplyWound(player, "WOUND_LEGR_BLACKED")
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "right"})
-        elseif (rcms:HasWound(player, "WOUND_LEGL_BLACKED")) then
-            return;
-        else 
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "right"})
-            rcms:ApplyWound(player, "WOUND_LEGR_BLACKED")
-        end;
+    if (LeftLegHealth == 0 and LeftLegHealth == 0) then
+        Clockwork.injury:DevelopInjuries(player, 99, LeftLeg, true)
+        print("Player should develop injuries now! LEFTLEG")
     end;
-    if (LEFTLEG == 0) then
-        if (rcms:HasWound(player, "WOUND_LEGR_SPRAIN")) then
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "left"})
-            rcms:RemoveWound(player, "WOUND_LEGR_SPRAIN")
-            rcms:ApplyWound(player, "WOUND_LEGR_BLACKED")
-        elseif (rcms:HasWound(player, "WOUND_LEGR_BREAK")) then
-            rcms:RemoveWound(player, "WOUND_LEGR_BREAK")
-            rcms:ApplyWound(player, "WOUND_LEGR_BLACKED")
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "left"})
-        elseif (rcms:HasWound(player, "WOUND_LEGL_BLACKED")) then
-            return;
-        else 
-            Clockwork.player:Notify(player, {"ActionLegBlacked", "left"})
-            rcms:ApplyWound(player, "WOUND_LEGR_BLACKED")
-        end;
+    if (RightLegHealth == 0 and RightLegHealth == 0) then
+        Clockwork.injury:DevelopInjuries(player, 99, RightLeg, true)
+        print("Player should develop injuries now! RIGHTLEG")
     end;
 end;
+

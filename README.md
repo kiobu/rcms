@@ -1,7 +1,3 @@
-# rcms - Realistic Clockwork Medical System
+# rcms - Realistic Clockwork Medical System: Overhaul
 
-A semi-realistic medical system for Clockwork.
-
-### Note:
-
-Current development for RCMS is hosted offline and will not be uploaded to this repository until significant releases are made.
+A semi-realistic medical system for Clockwork based on the Clockwork limbs library.
