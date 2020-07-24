@@ -11,12 +11,14 @@ function rcms:PlayerCharacterInitialized(player)
 	-- end;
 end;
 
--- Calculate wounds for fall damage.
 function rcms:PlayerTakeDamage(player, inflictor, attacker, hitGroup, damageInfo)
     if (player:Alive()) then
 		if (damageInfo:IsFallDamage()) then
 			print("We should now enter calculate fall injuries!")
-			rcms:CalculateFallInjuries(player);
+			rcms:CalculateFallInjuries(player, damageInfo);
+		elseif (damageInfo:IsBulletDamage()) then
+			print("We should now calculated bullet injuries.")
+			rcms:CalculateGunshotInjuries(player, damageInfo, hitGroup);
 		end;
     end;
 end;

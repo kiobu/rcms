@@ -1,6 +1,7 @@
 Clockwork.injury = Clockwork.kernel:NewLibrary("Injuries");
 local cwInj = Clockwork.injury;
 
+local HITGROUP_GENERIC = HITGROUP_GENERIC;
 local HITGROUP_RIGHTARM = HITGROUP_RIGHTARM;
 local HITGROUP_RIGHTLEG = HITGROUP_RIGHTLEG;
 local HITGROUP_LEFTARM = HITGROUP_LEFTARM;
@@ -20,6 +21,7 @@ Clockwork.injury.hitgroupnames = {
     [HITGROUP_GENERIC]  = "HITGROUP_GENERIC"
 };
 
+-- Used to create the injury table.
 Clockwork.injury.HITGROUPS = {
     ["HITGROUP_HEAD"] = {"HITGROUP_HEAD"},
     ["HITGROUP_RIGHTARM"] = {"HITGROUP_RIGHTARM"},
@@ -32,10 +34,11 @@ Clockwork.injury.HITGROUPS = {
 }
 
 Clockwork.injury.INJURIES = {
-    ["HITGROUP_LEFTLEG"] = {"GSW", "BLOOD_LOSS"},
-    ["HITGROUP_RIGHTLEG"] = {"GSW", "BLOOD_LOSS"},
+    ["HITGROUP_LEFTLEG"] = {"GSW"},
+    ["HITGROUP_RIGHTLEG"] = {"GSW"},
 }
 
+-- Sequential fall injuries.
 Clockwork.injury.INJURIES_FALL = {
     ["HITGROUP_LEFTLEG"] = {"SPRAIN", "BREAK", "FRACTURE"},
     ["HITGROUP_RIGHTLEG"] = {"SPRAIN", "BREAK", "FRACTURE"},
@@ -68,6 +71,16 @@ function cwInj:ApplyInjury(player, type, hitgroup)
     local injuries = cwInj:GetInjuryTable(player)
     table.insert(injuries[hitgroup], type)
     player:SetCharacterData("Injuries", injuries);
+end;
+
+function cwInj:ApplyInjuryNotify(player, type, hitgroup)
+    cwInj:ApplyInjury(player, type, hitgroup)
+    local localized = "STATUS_" .. hitgroup .. "_" .. type
+    if (rcms.statusChatMod[localized]) then
+        Clockwork.chatBox:Add(player, nil, rcms.statusChatMod[localized], {localized});
+    else
+        Clockwork.chatBox:Add(player, nil, "medical_severe", {localized});
+    end;
 end;
 
 function cwInj:RemoveInjury(player, type, hitgroup)
@@ -110,15 +123,18 @@ function cwInj:DevelopInjuries(player, factor, hitgroup, bIsFallDamage)
             if (k+factor <= #tab[hitgroup]) then
                 cwInj:RemoveInjury(player, v, hitgroup)
                 cwInj:ApplyInjury(player, tab[hitgroup][k+factor], hitgroup)
+                Clockwork.chatBox:Add(player, nil, "medical_severe", {"STATUS_" .. hitgroup .. "_" .. tab[hitgroup][k+factor]});
                 break;
             else
                 cwInj:RemoveInjury(player, v, hitgroup)
                 cwInj:ApplyInjury(player, tab[hitgroup][#tab[hitgroup]], hitgroup)
+                Clockwork.chatBox:Add(player, nil, "medical_severe", {"STATUS_" .. hitgroup .. "_" .. tab[hitgroup][#tab[hitgroup]]});
                 break;
             end;
         end;
     end;
     if (!canDevelop) then
-        cwInj:ApplyInjury(player, tab[hitgroup][factor+1], hitgroup)
+        cwInj:ApplyInjury(player, tab[hitgroup][factor], hitgroup)
+        Clockwork.chatBox:Add(player, nil, "medical_severe", {"STATUS_" .. hitgroup .. "_" .. tab[hitgroup][factor]});
     end;
 end;

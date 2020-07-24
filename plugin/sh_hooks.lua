@@ -1,4 +1,8 @@
 function rcms:PlayerThink(player, curTime, infoTable)
+    local additive = 0;
+    if (Clockwork.injury:HasInjury(player, "ADRENALINE", "STATUS_EFFECTS")) then
+        additive = additive + 20;
+    end;
     
     if (Clockwork.injury:HasInjury(player, "FRACTURE", "HITGROUP_LEFTLEG") and Clockwork.injury:HasInjury(player, "FRACTURE", "HITGROUP_RIGHTLEG")) then
         infoTable.walkSpeed = 1;
@@ -12,12 +16,12 @@ function rcms:PlayerThink(player, curTime, infoTable)
                 infoTable.walkSpeed = 33;
                 infoTable.runSpeed = 33;
             else
-                infoTable.walkSpeed = Clockwork.config:Get("walk_speed"):Get();
-                infoTable.runSpeed = Clockwork.config:Get("run_speed"):Get();
+                infoTable.walkSpeed = Clockwork.config:Get("walk_speed"):Get() + additive;
+                infoTable.runSpeed = Clockwork.config:Get("run_speed"):Get() + additive;
             end;
         else
-            infoTable.walkSpeed = Clockwork.config:Get("walk_speed"):Get();
-            infoTable.runSpeed = Clockwork.config:Get("run_speed"):Get();
+            infoTable.walkSpeed = Clockwork.config:Get("walk_speed"):Get() + additive;
+            infoTable.runSpeed = Clockwork.config:Get("run_speed"):Get() + additive;
         end;
     end;
 
